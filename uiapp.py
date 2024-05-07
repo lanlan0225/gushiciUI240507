@@ -56,7 +56,7 @@ def main():
         # 发送请求，获取access_token
         access_token = get_access_token()
         # 调用百度API并获取响应
-        response_data = make_request(access_token, user_input)
+        response_data = make_request(access_token, prompt)
         
         # 提取响应  
         msg_content = response_data["result"]  
