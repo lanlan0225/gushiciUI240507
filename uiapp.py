@@ -38,35 +38,36 @@ def make_request(access_token, user_input):
 
 
 def main():
-    # 获取access_token
-    access_token = get_access_token()
 
-    # 在Streamlit中创建输入字段
-    user_input = st.text_input("请输入你想问的问题：")
+    # 标题
+    st.title("古诗词问答大模型")
 
-    
-    st.write("回答：")
-    st.write("深山破屋苔已凝")
+    # 初始化会话状态，会话状态中没有"messages"键，则添加一个初始的消息列表，其中包含一条来自助手的消息
+    if "messages" not in st.session_state:
+    st.session_state["messages"] = [{"role": "assistant", "content": "你想要了解古诗词的什么问题？"}]
 
-    # # 如果用户输入了问题，则发送请求并显示回答
-    # if user_input:
-    #     # 发送请求
-    #     response_data = make_request(access_token, user_input)
+    # 显示之前的消息
+    for msg in st.session_state.messages:  
+    st.chat_message(msg["role"]).write(msg["content"])
 
-    #     # 提取并显示回答
-    #     if "result" in response_data:
-    #         st.write("回答：")
-    #         st.write(response_data["result"])
-    #     else:
-    #         st.write("没有获取到回答。")
+    # 处理用户输入
+    if prompt := st.chat_input():
+        
+        # 发送请求，获取access_token
+        access_token = get_access_token()
+        # 调用百度API并获取响应
+        response_data = make_request(access_token, user_input)
+        
+        # 提取响应  
+        msg_content = response_data["result"]  
+      
+        # 将用户的输入和机器人的回复添加到消息列表中，并显示  
+        st.session_state.messages.append({"role": "user", "content": prompt})  
+        st.chat_message("user").write(prompt)  
+        st.session_state.messages.append({"role": "assistant", "content": msg_content})  
+        st.chat_message("assistant").write(msg_content)
 
 
 if __name__ == '__main__':
     # 运行Streamlit应用
-    st.markdown(  
-    f"""   
-    <h1 style="text-align: center; font-size: 36px; font-weight: bold;">古诗词问答</h1>
-    """,  
-    unsafe_allow_html=True,  
-    )  
     main()
