@@ -44,11 +44,11 @@ def main():
 
     # 初始化会话状态，会话状态中没有"messages"键，则添加一个初始的消息列表，其中包含一条来自助手的消息
     if "messages" not in st.session_state:
-    st.session_state["messages"] = [{"role": "assistant", "content": "你想要了解古诗词的什么问题？"}]
+        st.session_state["messages"] = [{"role": "assistant", "content": "你想要了解古诗词的什么问题？"}]
 
     # 显示之前的消息
     for msg in st.session_state.messages:  
-    st.chat_message(msg["role"]).write(msg["content"])
+        st.chat_message(msg["role"]).write(msg["content"])
 
     # 处理用户输入
     if prompt := st.chat_input():
