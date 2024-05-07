@@ -52,6 +52,10 @@ def main():
 
     # 处理用户输入
     if prompt := st.chat_input():
+
+        # 将用户输入添加到消息列表，并显示
+        st.session_state.messages.append({"role": "user", "content": prompt})  
+        st.chat_message("user").write(prompt)  
         
         # 发送请求，获取access_token
         access_token = get_access_token()
@@ -61,9 +65,7 @@ def main():
         # 提取响应  
         msg_content = response_data["result"]  
       
-        # 将用户的输入和机器人的回复添加到消息列表中，并显示  
-        st.session_state.messages.append({"role": "user", "content": prompt})  
-        st.chat_message("user").write(prompt)  
+        # 将模型响应内容添加到消息列表中，并显示  
         st.session_state.messages.append({"role": "assistant", "content": msg_content})  
         st.chat_message("assistant").write(msg_content)
 
